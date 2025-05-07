@@ -12,21 +12,23 @@ The SHIFT app takes a String and an Integer, then shifts the characters in the s
 6. The ShiftController returns the result (ShiftResponse.java) as Original(String) and Shifted(String), which is displayed on preferred frontend Postman or React.
 
 | Flow |
-Postman → ShiftController → ShiftRequest (validation) → ShiftService (logic) → ShiftResponse → Postman
+Frontend → ShiftController → ShiftRequest (validation) → ShiftService (logic) → ShiftResponse → Frontend
 
 | Instructions to Run the Program | 
-    System Requirements: JAVA (17 or higher), NODE JS (11.2.0 or higher) or POSTMAN
-Extract both 1) Backend and 2)FrontEnd to a common local folder
+System Requirements: JAVA (17 or higher), NODE JS (11.2.0 or higher) or POSTMAN
+Clone Repository to a local folder
 1. In CMD terminal navigate to 'CodingExerciseAMA\backend' and run './mvnw spring-boot:run' OR alternatively try 'mvnw spring-boot:run'
 -- Server should be running if SPRING Lettering appears in the terminal --
-2. Test the backend with POSTMAN by going to localhost:8080/api/shift and sending a POST request body JSON Object i.e: 
+
+2. Test the backend with POSTMAN by going to localhost:8080/api/shift and sending a POST request body raw JSON Object
+-- EXAMPLE --
 {
-"input":"hello world"
+"input":"hello world",
 "shift":5
 }
 Output should appear with original and shifted result i.e:
 {
-"original":"hello world"
+"original":"hello world",
 "shifted":"helloworld "
 }
 
@@ -39,7 +41,7 @@ For Front end Interactivity:
 - frontend - REACT JS
     - App.js
 - Tests
-    - test\java\com\tanishk\codingExercise 
+    - test\java\com\tanishk\codingExercise (can be run with ./mvnw test)
 
 Jakarta Tests Successfully Validate:
 - Shift Integer cannot be Negative

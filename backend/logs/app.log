@@ -116,3 +116,6 @@ Caused by: com.fasterxml.jackson.core.JsonParseException: Unexpected character (
 	at com.fasterxml.jackson.databind.ObjectReader.readValue(ObjectReader.java:1481)
 	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:395)
 	... 51 common frames omitted
+2025-05-06 20:59:08 - WARN - c.t.c.e.GlobalExceptionHandler - Validation errors: {input=Input string cannot be empty.}
+2025-05-06 20:59:10 - WARN - c.t.c.e.GlobalExceptionHandler - Validation errors: {input=Input string must contain only alphabetic characters and spaces.}
+2025-05-06 20:59:27 - WARN - c.t.c.e.GlobalExceptionHandler - Validation errors: {input=Input string must contain only alphabetic characters and spaces.}
