@@ -3,6 +3,8 @@ Tanishk Nalamolu | SHIFT App Beta
 | App Description |
 The SHIFT app takes a String and an Integer, then shifts the characters in the string by the amount of the integer starting with the ending characters first.
 
+https://www.loom.com/share/fa30dcb18e6d4a04b5bcba8abc432373
+
 | What the App Does |  
 1. React or Postman (Frontend) takes user input as a raw JSON body and sends it to the backend with an HTTP POST request.
 2. ShiftController (Backend) recieves the request, mapping to a DTO
