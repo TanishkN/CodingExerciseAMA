@@ -1,23 +1,30 @@
 package com.tanishk.codingExercise;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
+import com.tanishk.codingExercise.dto.ShiftRequest;
 import com.tanishk.codingExercise.service.ShiftService;
-//Different test cases based on a shift 
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+
+//Different test cases based on a shift
 class CodingExerciseApplicationTests {
 
     private final ShiftService shiftService = new ShiftService();
-
+    private static Validator validator;
+    
     @Test
     void testThatValidInputAndPositiveShiftShouldWork() {
             // Given
             String input = "abcdef";
             int shift = 2;
-    
+   
             // When
             String result = shiftService.shiftCharacters(input, shift);
-    
+   
             // Then
             assertEquals("efabcd", result);
     }
@@ -26,10 +33,10 @@ class CodingExerciseApplicationTests {
             // Given
             String input = "abcdef";
             int shift = 6;
-    
+   
             // When
             String result = shiftService.shiftCharacters(input, shift);
-    
+   
             // Then
             assertEquals("abcdef", result);
     }
@@ -38,22 +45,22 @@ class CodingExerciseApplicationTests {
             // Given
             String input = "hello wor   l  d";
             int shift = 8;
-    
+   
             // When
             String result = shiftService.shiftCharacters(input, shift);
-    
+   
             // Then
-            assertEquals("r   l  dhello wo ", result);
+            assertEquals("r   l  dhello wo", result);
     }
     @Test
     void testThatLargeShiftAmountShouldRotate() {
             // Given
             String input = "hello world";
             int shift = 94;
-    
+   
             // When
             String result = shiftService.shiftCharacters(input, shift);
-    
+   
             // Then
             assertEquals(" worldhello", result);
     }
@@ -63,60 +70,71 @@ class CodingExerciseApplicationTests {
             // Given
             String input = "a";
             int shift = 100;
-    
+   
             // When
             String result = shiftService.shiftCharacters(input, shift);
-    
+   
             // Then
             assertEquals("a", result);
     }
     @Test
     void testThatLargeStringShouldWork() {
             // Given
-            String input = "abcdefghijklmnopqrstu";
+            String input = "abcdefghijklmnopqrst";
             int shift = 99;
-    
+   
             // When
             String result = shiftService.shiftCharacters(input, shift);
-    
+   
             // Then
-            assertEquals("efabcd", result);
+            assertEquals("bcdefghijklmnopqrsta", result);
     }
 
     @Test
-    void testThatEmptyInputShouldReturnError() {
-            // Given
-            String input = "";
-            int shift = 2;
-    
-            // When
-            String result = shiftService.shiftCharacters(input, shift);
-    
-            // Then
-            assertEquals("efabcd", result);
+    void testThatEmptyStringShouldNotWork() {
+        // Given
+        ShiftRequest request = new ShiftRequest("", 2);
+        
+        // When
+        Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
+        
+        // Then
+        ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
+        assertEquals("input", violation.getPropertyPath().toString()); // Check which field failed
+        assertEquals("Input string cannot be empty.", violation.getMessage()); // Standard Jakarta message
+        
     }
     @Test
-    void testThatInvalidShiftShouldThrowException() {
-            // Given
-            String input = "abcdef";
-            int invalidShift = -10;
-    
-            // When
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> shiftService.shiftCharacters(input, invalidShift), "Should throw error for invalid shift values");
-            
-            //Then
-            assertEquals("Invalid shift value", exception.getMessage());
+    void testThatNegativeNumberShouldNotWork() {
+        // Given
+        ShiftRequest request = new ShiftRequest("hello world", -10);
+   
+        // When
+        Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
+   
+        // Then
+        assertEquals(1, violations.size());
+        ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
+        assertEquals("shift", violation.getPropertyPath().toString()); // Check which field failed
+        assertEquals("Shift value must be non-negative.", violation.getMessage()); // Standard Jakarta message
     }
+
     @Test
-    void testThatNegativeInputShouldReturnError() {
-            // Given
-            String input = "abcdef";
-            int invalidShift = -10;
+    void testThatNullInputShouldNotWork() {
+    // Given
+        ShiftRequest request = new ShiftRequest(null, 5);
     
-            // When
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> shiftService.shiftCharacters(input, invalidShift), "Should throw error for invalid shift values");
-            
-            //Then
-            assertEquals("Invalid shift value", exception.getMessage());
-    }
+    // When
+        Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
+    
+    // Then
+        assertEquals(1, violations.size()); // Check exactly one violation exists
+    
+        ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
+        assertEquals("input", violation.getPropertyPath().toString()); // Check which field failed
+        assertEquals("Input string cannot be empty.", violation.getMessage()); // Standard Jakarta message
+    // OR if you customized the message:
+    // assertEquals("Input string cannot be empty", violation.getMessage());
+    }   
+
 }

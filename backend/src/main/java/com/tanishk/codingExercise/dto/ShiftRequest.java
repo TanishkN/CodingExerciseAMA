@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Size;
 
 public class ShiftRequest {
     @NotBlank(message = "Input string cannot be empty.")
-    @NotNull(message = "Input string cannot be null.")
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Input string must contain only alphabetic characters and spaces.")
     @Size(min = 1, max = 20, message = "Input string must be more than 1 character or less than 20 characters.")
     private String input;
@@ -27,8 +26,7 @@ public class ShiftRequest {
 
     // Default constructor (required for deserialization)
     public ShiftRequest() {}
-
-    // Getters and setters
+        // Getters and setters
     public String getInput() {
         return input;
     }
@@ -44,4 +42,5 @@ public class ShiftRequest {
     public void setShift(int shift) {
         this.shift = shift;
     }
+
 }

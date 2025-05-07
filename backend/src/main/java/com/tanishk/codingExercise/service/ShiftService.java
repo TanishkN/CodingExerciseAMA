@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShiftService {
     /**
-     * Shifts the characters in the input string by the specified number of positions.
+     * Shifts the characters in the input string starting with the last characters, bringing them to the first position by the a user entered shift amount.
      * @param input The input string to be shifted.
      * @param shift The number of positions to shift the characters.
      * @return The shifted string.
