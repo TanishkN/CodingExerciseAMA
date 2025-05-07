@@ -12,7 +12,6 @@ public class ShiftService {
      * @return The shifted string.
      */
     public String shiftCharacters(String input, int shift) {
-
         int length = input.length();
         int normalizedShift = shift % length;
         //String shiftedString = input.substring(normalizedShift)+ input.substring(0, normalizedShift);

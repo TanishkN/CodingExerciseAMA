@@ -119,3 +119,5 @@ Caused by: com.fasterxml.jackson.core.JsonParseException: Unexpected character (
 2025-05-06 20:59:08 - WARN - c.t.c.e.GlobalExceptionHandler - Validation errors: {input=Input string cannot be empty.}
 2025-05-06 20:59:10 - WARN - c.t.c.e.GlobalExceptionHandler - Validation errors: {input=Input string must contain only alphabetic characters and spaces.}
 2025-05-06 20:59:27 - WARN - c.t.c.e.GlobalExceptionHandler - Validation errors: {input=Input string must contain only alphabetic characters and spaces.}
+2025-05-06 21:37:03 - WARN - c.t.c.e.GlobalExceptionHandler - Validation errors: {input=Input string must contain only alphabetic characters and spaces.}
+2025-05-06 23:09:47 - WARN - c.t.c.e.GlobalExceptionHandler - Validation errors: {input=Input string must contain only alphabetic characters and spaces.}

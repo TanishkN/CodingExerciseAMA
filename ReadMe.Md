@@ -47,6 +47,7 @@ Jakarta Tests Successfully Validate:
 - Shift Integer cannot be Negative
 - Input String cannot be null
 - Input String cannot be blank
+- Input String cannot contain special characters or numbers 
 Happy Paths:
 - Input String with Spaces works 1x test case  
 - Input String = shifted String works when string length = shift integer  

@@ -2,19 +2,30 @@ package com.tanishk.codingExercise;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.tanishk.codingExercise.dto.ShiftRequest;
 import com.tanishk.codingExercise.service.ShiftService;
 
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 //Different test cases based on a shift
 class CodingExerciseApplicationTests {
 
     private final ShiftService shiftService = new ShiftService();
-    private static Validator validator;
+    private Validator validator;
+
+    @BeforeEach
+    void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
     
     @Test
     void testThatValidInputAndPositiveShiftShouldWork() {
@@ -89,52 +100,68 @@ class CodingExerciseApplicationTests {
             // Then
             assertEquals("bcdefghijklmnopqrsta", result);
     }
-
     @Test
     void testThatEmptyStringShouldNotWork() {
-        // Given
         ShiftRequest request = new ShiftRequest("", 2);
-        
-        // When
         Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
         
-        // Then
+        assertFalse(violations.isEmpty(), "Should have violations for empty string");
         ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
-        assertEquals("input", violation.getPropertyPath().toString()); // Check which field failed
-        assertEquals("Input string cannot be empty.", violation.getMessage()); // Standard Jakarta message
-        
+        assertEquals("input", violation.getPropertyPath().toString());
+        assertEquals("Input string must be more than 1 character or less than 20 characters.", violation.getMessage());
     }
+
     @Test
     void testThatNegativeNumberShouldNotWork() {
-        // Given
         ShiftRequest request = new ShiftRequest("hello world", -10);
-   
-        // When
         Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
-   
-        // Then
+        
         assertEquals(1, violations.size());
         ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
-        assertEquals("shift", violation.getPropertyPath().toString()); // Check which field failed
-        assertEquals("Shift value must be non-negative.", violation.getMessage()); // Standard Jakarta message
+        assertEquals("shift", violation.getPropertyPath().toString());
+        assertEquals("Shift value must be non-negative.", violation.getMessage());
     }
 
     @Test
     void testThatNullInputShouldNotWork() {
-    // Given
         ShiftRequest request = new ShiftRequest(null, 5);
-    
-    // When
         Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
-    
-    // Then
-        assertEquals(1, violations.size()); // Check exactly one violation exists
-    
+        
+        assertEquals(1, violations.size());
         ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
-        assertEquals("input", violation.getPropertyPath().toString()); // Check which field failed
-        assertEquals("Input string cannot be empty.", violation.getMessage()); // Standard Jakarta message
-    // OR if you customized the message:
-    // assertEquals("Input string cannot be empty", violation.getMessage());
-    }   
+        assertEquals("input", violation.getPropertyPath().toString());
+        assertEquals("Input string cannot be empty.", violation.getMessage());
+    }
+
+    @Test
+    void testThatSpecialCharactersForInputShouldNotWork() {
+        ShiftRequest request = new ShiftRequest("some!Value$used", 5);
+        Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
+        
+        assertEquals(1, violations.size());
+        ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
+        assertEquals("input", violation.getPropertyPath().toString());
+        assertEquals("Input string must contain only alphabetic characters and spaces.", violation.getMessage());
+    }
+    @Test
+    void testThatInputExceedsLimitWhichShouldNotWork() {
+        ShiftRequest request = new ShiftRequest("someerrfrvffhfjdpskfmi", 5);
+        Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
+        
+        assertEquals(1, violations.size());
+        ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
+        assertEquals("input", violation.getPropertyPath().toString());
+        assertEquals("Input string must be more than 1 character or less than 20 characters.", violation.getMessage());
+    }
+    @Test
+    void testThatShiftExceedsLimitWhichShouldNotWork() {
+        ShiftRequest request = new ShiftRequest("some", 101);
+        Set<ConstraintViolation<ShiftRequest>> violations = validator.validate(request);
+        
+        assertEquals(1, violations.size());
+        ConstraintViolation<ShiftRequest> violation = violations.iterator().next();
+        assertEquals("shift", violation.getPropertyPath().toString());
+        assertEquals("Shift value must be less than or equal to 100.", violation.getMessage());
+    }
 
 }
